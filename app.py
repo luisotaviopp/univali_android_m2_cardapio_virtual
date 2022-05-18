@@ -8,7 +8,7 @@ import mysql.connector
 
 db_host = 'localhost'
 db_user = 'luis'
-db_password = 'mudar_quando_executar' #trocar esses dados depois
+db_password = 'Djl1u2i3@' #trocar esses dados depois
 db_database = 'restaurant_menu'
 db_charset = 'utf8'
 
