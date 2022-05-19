@@ -1,9 +1,10 @@
 package com.luisZimermann.cardapioVirtualM2.model
 
 data class ProductModel(
-    val amount: Int,
-    val category_name: String,
-    val description: String,
-    val product_name: String,
-    val thumb_url: String
+    var product_id: Int = 0,
+    var amount: Float = 0f,
+    var category_name: String = "",
+    var description: String = "",
+    var product_name: String,
+    var thumb_url: String = ""
 )

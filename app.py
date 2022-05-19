@@ -7,7 +7,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import mysql.connector
 
 db_host = 'localhost'
-db_user = 'luis'
+db_user = 'root'
 db_password = 'Djl1u2i3@' #trocar esses dados depois
 db_database = 'restaurant_menu'
 db_charset = 'utf8'
@@ -34,7 +34,7 @@ def get_products():
     cursor = connection.cursor(dictionary=True)
 
     # Executa a Query
-    cursor.execute("SELECT p.name as product_name, p.amount, p.description, c.name as category_name \
+    cursor.execute("SELECT p.id as product_id, p.name as product_name, p.amount, p.description, c.name as category_name \
                     FROM product p \
                     INNER JOIN category c \
                     ON p.id = c.id;")

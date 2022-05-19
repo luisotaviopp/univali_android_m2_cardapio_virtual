@@ -1,18 +1,18 @@
 package com.luisZimermann.cardapioVirtualM2.adapter
 
-import android.media.Image
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.view.inputmethod.InputBinding
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.luisZimermann.cardapioVirtualM2.databinding.ItemProductBinding
 import com.luisZimermann.cardapioVirtualM2.model.ProductModel
+import com.luisZimermann.cardapioVirtualM2.service.DatabaseService
+import com.squareup.picasso.Picasso
 
 class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(){
 
-        inner class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class ProductViewHolder(val binding: ItemProductBinding) : RecyclerView.ViewHolder(binding.root)
 
         private val diffCallback = object : DiffUtil.ItemCallback<ProductModel>(){
             override fun areItemsTheSame(oldItem: ProductModel, newItem: ProductModel): Boolean {
@@ -46,10 +46,18 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(){
         override fun onBindViewHolder(holder: ProductViewHolder, position: Int) {
             holder.binding.apply {
                 val product = products[position]
-                //imageViewProduct.setImageResource(product.thumb_url);
+
+                // Adiciona os produtos no SQL
+                val db = DatabaseService(holder.binding.root.context)
+                db.addProduct(product)
+
+                // Busca as imagens do URL
+                Picasso.get().load(product.thumb_url)
+                    .into(imageViewProduct)
+
                 tvProductName.text = product.product_name
                 tvProductDescription.text = product.description
-                tvProductValue.text = product.amount.toString()
+                tvProductValue.text = "R$${(product.amount / 100)}"
             }
         }
     }

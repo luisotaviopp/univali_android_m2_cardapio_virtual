@@ -65,4 +65,8 @@ dependencies {
     //Coroutine Lyfecycle Scopes
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.1'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.1'
+
+    // Images
+    implementation 'com.squareup.picasso:picasso:2.8'
+
 }

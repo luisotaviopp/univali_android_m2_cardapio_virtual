@@ -1,9 +1,5 @@
 package com.luisZimermann.cardapioVirtualM2.view
 
-import android.content.Context
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -13,15 +9,23 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.luisZimermann.cardapioVirtualM2.adapter.ProductAdapter
 import com.luisZimermann.cardapioVirtualM2.databinding.ActivityProductListViewBinding
+import com.luisZimermann.cardapioVirtualM2.model.ProductModel
+import com.luisZimermann.cardapioVirtualM2.service.DatabaseService
 import com.luisZimermann.cardapioVirtualM2.service.RetrofitInstance
 import com.luisZimermann.cardapioVirtualM2.service.RetrofitInstance.TAG
 import retrofit2.HttpException
 import java.io.IOException
 
-
 class ProductListView : AppCompatActivity() {
     private lateinit var binding: ActivityProductListViewBinding
     private lateinit var productAdapter: ProductAdapter
+
+    // Iniciando a RecyclerView
+    var linearLayoutManager: LinearLayoutManager? = null
+
+    // SQLite
+    var productSQLiteList = ArrayList<ProductModel>()
+    var databaseHandler = DatabaseService(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +75,7 @@ class ProductListView : AppCompatActivity() {
 
             val response = try {
                 // Faz a chamada na API
+
                 RetrofitInstance.api.getAllProducts()
             } catch (e: IOException){
                 // Aqui estão os erros que podem retornar por falta de internet,
@@ -91,6 +96,12 @@ class ProductListView : AppCompatActivity() {
 
             if (response.isSuccessful && response.body() != null) {
                 Toast.makeText(applicationContext, "Pegando dados da API...", Toast.LENGTH_LONG).show()
+
+                // Deleta os ítens salvos anteriormente para não ter duplicados
+                val db = DatabaseService(this@ProductListView)
+                db.deleteAllProducts()
+
+                // Repassa os produtos para o recyclerview
                 productAdapter.products = response.body()!!
             } else {
                 Log.e(TAG, "Ops, something went whong here...")
@@ -108,5 +119,9 @@ class ProductListView : AppCompatActivity() {
 
     private fun getDataFromSqLite(){
         Toast.makeText(applicationContext, "Pegando dados do SQLITE...", Toast.LENGTH_LONG).show()
+
+        productSQLiteList = databaseHandler.getAllProducts()
+        linearLayoutManager = LinearLayoutManager(this)
+        productAdapter.products = productSQLiteList
     }
 }
