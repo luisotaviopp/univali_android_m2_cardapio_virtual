@@ -10,7 +10,7 @@ object RetrofitInstance {
 
     val api: ApiController by lazy {
         Retrofit.Builder()
-            .baseUrl("http://192.168.1.7:5000")
+            .baseUrl("http://10.0.2.2:5000/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
             .create(ApiController::class.java)

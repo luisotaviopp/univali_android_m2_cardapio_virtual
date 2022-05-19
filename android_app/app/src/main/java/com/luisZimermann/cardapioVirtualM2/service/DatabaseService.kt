@@ -38,7 +38,6 @@ class DatabaseService (ctx: Context): SQLiteOpenHelper(ctx, "restaurant_menu",nu
         values.put("amount", product.amount)
         values.put("description", product.description)
         values.put("thumb_url", product.thumb_url)
-        values.put("category_name", product.category_name)
 
         val _success = db.insert("product",null, values)
 
@@ -55,23 +54,21 @@ class DatabaseService (ctx: Context): SQLiteOpenHelper(ctx, "restaurant_menu",nu
             if(cursor.moveToFirst()){
                 do{
                     val id = cursor.getInt(cursor.getColumnIndex("name"))
-                    val amount = cursor.getFloat(cursor.getColumnIndex("name"))
-                    val category_name = cursor.getString(cursor.getColumnIndex("name"))
-                    val description = cursor.getString(cursor.getColumnIndex("name"))
+                    val amount = cursor.getFloat(cursor.getColumnIndex("amount"))
+                    val description = cursor.getString(cursor.getColumnIndex("description"))
                     val product_name = cursor.getString(cursor.getColumnIndex("name"))
-                    val thumb_url = cursor.getString(cursor.getColumnIndex("name"))
+                    val thumb_url = cursor.getString(cursor.getColumnIndex("thumb_url"))
 
                     val product = ProductModel(
                         id,
                         amount,
-                        category_name,
                         description,
                         product_name,
                         thumb_url
                     )
 
                     productList.add(product)
-                }while(cursor.moveToNext())
+                } while (cursor.moveToNext())
             }
         }
         cursor.close()

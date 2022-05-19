@@ -1,5 +1,6 @@
 package com.luisZimermann.cardapioVirtualM2.view
 
+
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -63,6 +64,7 @@ class ProductListView : AppCompatActivity() {
 
         // -------------------------------------------------> Iniciando o GET na API.
         getDataFromApi()
+
     }
 
     private fun getDataFromApi(){
@@ -97,12 +99,18 @@ class ProductListView : AppCompatActivity() {
             if (response.isSuccessful && response.body() != null) {
                 Toast.makeText(applicationContext, "Pegando dados da API...", Toast.LENGTH_LONG).show()
 
+                // Repassa os produtos para o recyclerview
+                productAdapter.products = response.body()!!
+
                 // Deleta os ítens salvos anteriormente para não ter duplicados
                 val db = DatabaseService(this@ProductListView)
                 db.deleteAllProducts()
 
-                // Repassa os produtos para o recyclerview
-                productAdapter.products = response.body()!!
+                // Adiciona os produtos no SQLITE
+                for (product in productAdapter.products) {
+                    db.addProduct(product)
+                }
+
             } else {
                 Log.e(TAG, "Ops, something went whong here...")
             }

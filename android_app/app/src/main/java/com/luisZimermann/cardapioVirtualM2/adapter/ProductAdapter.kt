@@ -1,5 +1,7 @@
 package com.luisZimermann.cardapioVirtualM2.adapter
 
+import android.icu.number.NumberFormatter.with
+import android.icu.number.NumberRangeFormatter.with
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -47,13 +49,9 @@ class ProductAdapter : RecyclerView.Adapter<ProductAdapter.ProductViewHolder>(){
             holder.binding.apply {
                 val product = products[position]
 
-                // Adiciona os produtos no SQL
-                val db = DatabaseService(holder.binding.root.context)
-                db.addProduct(product)
-
                 // Busca as imagens do URL
                 Picasso.get().load(product.thumb_url)
-                    .into(imageViewProduct)
+                    .into(holder.binding.imageViewProduct)
 
                 tvProductName.text = product.product_name
                 tvProductDescription.text = product.description

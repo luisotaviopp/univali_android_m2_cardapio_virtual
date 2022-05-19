@@ -34,10 +34,8 @@ def get_products():
     cursor = connection.cursor(dictionary=True)
 
     # Executa a Query
-    cursor.execute("SELECT p.id as product_id, p.name as product_name, p.amount, p.description, c.name as category_name \
-                    FROM product p \
-                    INNER JOIN category c \
-                    ON p.id = c.id;")
+    cursor.execute("SELECT p.id as product_id, p.name as product_name, p.amount, p.description, p.thumb_url \
+                    FROM product p;")
 
    # Pega os dados retornados.
     products = cursor.fetchall()
@@ -47,10 +45,11 @@ def get_products():
 
     for product in products:
         product_data = {}
+        product_data['product_id'] =  product['product_id']
         product_data['product_name'] =  product['product_name']
         product_data['amount'] =  product['amount']
         product_data['description'] =  product['description']
-        product_data['category_name'] = product['category_name']
+        product_data['thumb_url'] = product['thumb_url']
         output.append(product_data)
 
     # Fecha a conexão do sql
